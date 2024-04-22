@@ -10,11 +10,14 @@ blocks:
       jobs:
         - name: go get & build
           commands:
+            - sem-version go 1.18
+            - export GO111MODULE=on
+            - export GOPATH=~/go
+            - 'export PATH=/home/semaphore/go/bin:$PATH'
             - checkout
-            - sem-version go 1.19
-            - go get
-            - go build -o ./bin/main
-            - cache store $(checksum main.go) bin
+            - cache restore
+            - go mod vendor
+            - cache store
   - name: Check code style
     task:
       jobs:
